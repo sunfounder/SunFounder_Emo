@@ -47,6 +47,8 @@ class _Basic_class(object):
 
 class LED_Matrix(_Basic_class):
     import spidev
+    import maps
+
     OFF = [
         0x00, 0x00, 0x00,
         0x00, 0x00, 0x00,
@@ -64,21 +66,22 @@ class LED_Matrix(_Basic_class):
         self.logger_setup()
         self.spi = self.spidev.SpiDev()
         self.spi.open(0,0)
+        self.alphabet = self.maps.alphabet()
 
-    def send_bytes(self, _bytes):
+    def show_bytes(self, _bytes):
         self.spi.writebytes(_bytes)
 
     def off(self):
         send_bytes(self.OFF)
 
-    def send_bits(self, _bits_list):
+    def show_bits(self, _bits_list):
         _bytes = []
         if len(_bits_list) != 8:
-            _error("arguement should be list of 8 lines of strings")
+            self._error("arguement should be list of 8 lines of strings")
         for _bits in _bits_list:
             _bits = _bits.replace(',', '').replace(' ', '')
             if len(_bits) != 24:
-                _error('every item in the list should be string with exact 24 "0" and "1" representing "off" and "on"')
+                self._error('every item in the list should be string with exact 24 "0" and "1" representing "off" and "on"')
             _byte0 = _bits[:8]
             _byte0 = int(_byte0, base=2)
             _bytes.append(_byte0)
@@ -88,7 +91,62 @@ class LED_Matrix(_Basic_class):
             _byte2 = _bits[16:]
             _byte2 = int(_byte2, base=2)
             _bytes.append(_byte2)
-        self.send_bytes(_bytes)
+        self.show_bytes(_bytes)
+
+    def string_to_map(self, s):
+        smap = []
+        for i in range(8):
+            bits = ''
+            for letter in s:
+                try:
+                    bits += self.alphabet.normal(letter)[-i-1]
+                except:
+                    for j in range(len(self.alphabet.normal(letter)[0])):
+                        bits += '0'
+                bits += '0'
+            smap.append(bits)
+        smap.reverse()
+        #for i in smap:
+        #    print i
+        return smap
+
+    def map_len(self, s):
+        smap = self.string_to_map(s)
+        return len(smap[0])
+
+    def show_string(self, s, pos=0):
+        bits_list = []
+        smap = self.string_to_map(s)
+        for i in range(8):
+            temp = ''
+            if pos <= 0:
+                for j in range(-pos,24-pos):
+                    try:
+                        temp += smap[i][j]
+                    except:
+                        temp += '0'
+            else:
+            # add 0 at front
+                for j in range(pos):
+                    temp += '0'
+                for j in range(24-pos):
+                    try:
+                        temp += smap[i][j]
+                    except:
+                        temp += '0'
+            bits_list.append(temp)
+        self.show_bits(bits_list)
+        #for i in bits_list:
+        #    print i
+        return len(smap[0])
+
+    @property
+    def supported_character(self):
+        self._supported_character = ''
+        for key in self.alphabet._normal.keys():
+            if key != 'ERROR_CHAR':
+                self._supported_character += key
+        return self._supported_character
 
 '''
 while True:
