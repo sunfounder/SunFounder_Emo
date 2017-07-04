@@ -35,7 +35,7 @@ while True:
     print("blink2")
     time.sleep(0.1)
 '''
-print lm.supported_character
+print "words you can use:\n",lm.supported_character
 value = ';) :( :D'
 value_len = lm.map_len(value)
 for i in range(value_len):

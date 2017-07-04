@@ -12,7 +12,7 @@ class _Basic_class(object):
     DEBUG_NAMES = ['critical', 'error', 'warning', 'info', 'debug']
 
     def __init__(self):v
-        
+
     def logger_setup(self):
         self.logger = self.logging.getLogger(self._class_name)
         self.ch = self.logging.StreamHandler()
@@ -29,7 +29,7 @@ class _Basic_class(object):
     @property
     def DEBUG(self):
         return self._DEBUG
-    
+
     @DEBUG.setter
     def DEBUG(self, debug):
         if debug in range(5):
@@ -43,7 +43,7 @@ class _Basic_class(object):
         self._debug('Set logging level to [%s]' % self._DEBUG)
 
     def end(self):
-        pass        
+        pass
 
 class LED_Matrix(_Basic_class):
     import spidev
@@ -66,13 +66,13 @@ class LED_Matrix(_Basic_class):
         self.logger_setup()
         self.spi = self.spidev.SpiDev()
         self.spi.open(0,0)
-        self.alphabet = self.maps.alphabet()
+
+        self.alphabet = self.maps.Alphabet()
+        self.emotions = self.maps.Emotions()
+        self.pictures = self.maps.Pictures()
 
     def show_bytes(self, _bytes):
         self.spi.writebytes(_bytes)
-
-    def off(self):
-        send_bytes(self.OFF)
 
     def show_bits(self, _bits_list):
         _bytes = []
@@ -114,6 +114,10 @@ class LED_Matrix(_Basic_class):
         smap = self.string_to_map(s)
         return len(smap[0])
 
+    def off(self):
+        #send_bytes(self.OFF)
+        self.show_bytes(self.OFF)
+
     def show_string(self, s, pos=0):
         bits_list = []
         smap = self.string_to_map(s)
@@ -140,6 +144,13 @@ class LED_Matrix(_Basic_class):
         #    print i
         return len(smap[0])
 
+    def show_emo(self, emo):
+        if emo in self.emotions._emotions.keys():
+            self.show_bits(self.emotions.emotion(emo))
+
+        if emo in self.pictures._pictures.keys():
+            self.show_bits(self.pictures.picture(emo))
+
     @property
     def supported_character(self):
         self._supported_character = ''
@@ -148,18 +159,81 @@ class LED_Matrix(_Basic_class):
                 self._supported_character += key
         return self._supported_character
 
-'''
-while True:
-    send_bit_map(blink1)
-    print("blink1")
-    time.sleep(2)
-    send_bit_map(blink2)
-    print("blink2")
-    time.sleep(0.1)
-    send_bit_map(blink1)
-    print("blink1")
-    time.sleep(0.1)
-    send_bit_map(blink2)
-    print("blink2")
-    time.sleep(0.1)
-'''
+    @property
+    def supported_emotions(self):
+        self._supported_emotions = ''
+        for key in self.emotions._emotions.keys():
+            self._supported_emotions += key
+            self._supported_emotions += '  '
+        return self._supported_emotions
+
+    @property
+    def supported_pictures(self):
+        self._supported_pictures = ''
+        for key in self.pictures._pictures.keys():
+            self._supported_pictures += key
+            self._supported_pictures += '  '
+        return self._supported_pictures
+
+    def print_supported(self):
+        print ("supported character:\n  %s \n"%self.supported_character)
+        print ("supported emotions:\n  %s \n"%self.supported_emotions)
+        print ("supported pictures:\n  %s \n"%self.supported_pictures)
+
+
+def supported():
+    lm = LED_Matrix()
+    lm.print_supported()
+
+def test_character():
+    lm = LED_Matrix()
+    value = ';) :( :D'
+    value_len = lm.map_len(value)
+    for i in range(value_len):
+        lm.show_string(value, -i+10)
+        time.sleep(0.1)
+
+def test_emotion():
+    lm = LED_Matrix()
+    for x in range(1,3):
+        lm.show_emo("look1")
+        time.sleep(0.3)
+
+        lm.show_emo("look2")
+        time.sleep(0.3)
+
+        lm.show_emo("look3")
+        time.sleep(0.3)
+
+        lm.show_emo("look4")
+        time.sleep(0.3)
+
+        lm.show_emo("look1")
+        time.sleep(0.3)
+
+def test_animate():
+    lm = LED_Matrix()
+    lm.show_emo("pac_man1")
+    time.sleep(0.8)
+
+    lm.show_emo("pac_man2")
+    time.sleep(0.8)
+
+    lm.show_emo("pac_man3")
+    time.sleep(0.8)
+
+
+if __name__ == '__main__':
+    import time
+    try:
+        supported()
+        while True:
+            test_character()
+            time.sleep(0.5)
+            test_animate()
+            time.sleep(0.5)
+            test_emotion()
+            time.sleep(0.5)
+    except KeyboardInterrupt:
+        pass
+
