@@ -6,8 +6,6 @@ Quick Links:
  * [About SunFounder Emo](#about_this_module)
  * [Update](#update)
  * [Trouble Shootings](#trouble)
-    * [{ERROR 1}](#error1)
-    * [{ERROR 2}](#error2)
  * [About SunFounder](#about_sunfounder)
  * [License](#license)
  * [Contact us](#contact_us)
