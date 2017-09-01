@@ -11,7 +11,8 @@ class _Basic_class(object):
               }
     DEBUG_NAMES = ['critical', 'error', 'warning', 'info', 'debug']
 
-    def __init__(self):v
+    def __init__(self):
+        pass
 
     def logger_setup(self):
         self.logger = self.logging.getLogger(self._class_name)
@@ -59,6 +60,9 @@ class Emo(_Basic_class):
         0x00, 0x00, 0x00,
         0x00, 0x00, 0x00]
 
+    _start_signal = [0x01]
+    _begin_data   = [0x02]
+
     _class_name = 'Emo'
 
     def __init__(self, ce=0):
@@ -74,7 +78,7 @@ class Emo(_Basic_class):
     def show_bytes(self, _bytes):
         if not self.get_start():
             return False
-        self.spi.writebytes(0x02)  # If emo get 0x02, it begin to store the HEX data
+        self.spi.writebytes(self._begin_data)  # If emo get 0x02, it begin to store the HEX data
         self.spi.writebytes(_bytes)
         return True
 
@@ -158,13 +162,14 @@ class Emo(_Basic_class):
     def get_start(self):
         count = 0
         while True:
-            a_status = self.spi.writebytes(0x01) # send start signel 0x01 and get respond
-            if (a_status == 0x01): # If emo get 0x01, and get start, it respond 0x01
+            self.spi.writebytes(self._start_signal) # send start signel 0x01 and get respond
+            a_status = self.spi.readbytes(1)
+            if (a_status == self._start_signal): # If emo get 0x01, and get start, it respond 0x01
                 break;
             count = count + 1
             if (count>23): # emo not get start, and over time
-                return false
-        return true
+                return False
+        return True
 
     @property
     def supported_character(self):
