@@ -45,7 +45,7 @@ class _Basic_class(object):
     def end(self):
         pass
 
-class LED_Matrix(_Basic_class):
+class Emo(_Basic_class):
     import spidev
     import maps
 
