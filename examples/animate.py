@@ -1,7 +1,7 @@
 import time
-import led_matrix
+from SunFounder_Emo import Emo
 
-lm = led_matrix.LED_Matrix()
+lm = Emo()
 
 def look_around():
     for x in range(1,3):

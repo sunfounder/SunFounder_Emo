@@ -47,7 +47,7 @@ class _Basic_class(object):
 
 class Emo(_Basic_class):
     import spidev
-    import maps
+    import emo_maps
 
     OFF = [
         0x00, 0x00, 0x00,
@@ -59,7 +59,7 @@ class Emo(_Basic_class):
         0x00, 0x00, 0x00,
         0x00, 0x00, 0x00]
 
-    _class_name = 'LED_Matrix'
+    _class_name = 'Emo'
 
     def __init__(self, ce=0):
         self.ce = ce
@@ -67,12 +67,16 @@ class Emo(_Basic_class):
         self.spi = self.spidev.SpiDev()
         self.spi.open(0,0)
 
-        self.alphabet = self.maps.Alphabet()
-        self.emotions = self.maps.Emotions()
-        self.pictures = self.maps.Pictures()
+        self.alphabet = self.emo_maps.Alphabet()
+        self.emotions = self.emo_maps.Emotions()
+        self.pictures = self.emo_maps.Pictures()
 
     def show_bytes(self, _bytes):
+        if not self.get_start():
+            return False
+        self.spi.writebytes(0x02)  # If emo get 0x02, it begin to store the HEX data
         self.spi.writebytes(_bytes)
+        return True
 
     def show_bits(self, _bits_list):
         _bytes = []
@@ -151,6 +155,17 @@ class Emo(_Basic_class):
         if emo in self.pictures._pictures.keys():
             self.show_bits(self.pictures.picture(emo))
 
+    def get_start(self):
+        count = 0
+        while True:
+            a_status = self.spi.writebytes(0x01) # send start signel 0x01 and get respond
+            if (a_status == 0x01): # If emo get 0x01, and get start, it respond 0x01
+                break;
+            count = count + 1
+            if (count>23): # emo not get start, and over time
+                return false
+        return true
+
     @property
     def supported_character(self):
         self._supported_character = ''
@@ -182,11 +197,11 @@ class Emo(_Basic_class):
 
 
 def supported():
-    lm = LED_Matrix()
+    lm = Emo()
     lm.print_supported()
 
 def test_character():
-    lm = LED_Matrix()
+    lm = Emo()
     value = ';) :( :D'
     value_len = lm.map_len(value)
     for i in range(value_len):
@@ -194,7 +209,7 @@ def test_character():
         time.sleep(0.1)
 
 def test_emotion():
-    lm = LED_Matrix()
+    lm = Emo()
     for x in range(1,3):
         lm.show_emo("look1")
         time.sleep(0.3)
@@ -212,7 +227,7 @@ def test_emotion():
         time.sleep(0.3)
 
 def test_animate():
-    lm = LED_Matrix()
+    lm = Emo()
     lm.show_emo("pac_man1")
     time.sleep(0.8)
 

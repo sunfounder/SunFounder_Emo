@@ -1,5 +1,6 @@
 import time
-import led_matrix
+from SunFounder_Emo import Emo
+
 blink1 = [
     0x00,0x00,0x00,
     0x00,0x00,0x00,
@@ -19,7 +20,7 @@ blink2 = [
     0x00,0x42,0x00,
     0x00,0x3C,0x00]
 
-lm = led_matrix.LED_Matrix()
+lm = Emo()
 '''
 while True:
     lm.send_bytes(blink1)
