@@ -23,7 +23,7 @@ It can display some emotions or simple pictures.The resolution ratio is 24 * 8.
 
 
 <a id="trouble"></a>
-###Trouble Shootings:
+### Trouble Shootings:
 ----------------------------------------------
 <a id="about_sunfounder"></a>
 ### About SunFounder
