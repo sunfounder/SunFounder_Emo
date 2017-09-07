@@ -82,7 +82,7 @@ class Emo(_Basic_class):
         self.spi.writebytes(_bytes)
         return True
 
-    def show_bits(self, _bits_list):
+    def string_bits_to_bytes(self, _bits_list):
         _bytes = []
         if len(_bits_list) != 8:
             self._error("arguement should be list of 8 lines of strings")
@@ -99,9 +99,9 @@ class Emo(_Basic_class):
             _byte2 = _bits[16:]
             _byte2 = int(_byte2, base=2)
             _bytes.append(_byte2)
-        self.show_bytes(_bytes)
+        return _bytes
 
-    def string_to_map(self, s):
+    def string_to_string_bits(self, s):
         smap = []
         for i in range(8):
             bits = ''
@@ -114,21 +114,14 @@ class Emo(_Basic_class):
                 bits += '0'
             smap.append(bits)
         smap.reverse()
-        #for i in smap:
-        #    print i
         return smap
 
-    def map_len(self, s):
-        smap = self.string_to_map(s)
-        return len(smap[0])
 
-    def off(self):
-        #send_bytes(self.OFF)
-        self.show_bytes(self.OFF)
-
-    def show_string(self, s, pos=0):
+    def string_to_bytes(self, s, pos=0):
+        #for i in smap:
+        #    print i
+        smap = self.string_to_string_bits(s)
         bits_list = []
-        smap = self.string_to_map(s)
         for i in range(8):
             temp = ''
             if pos <= 0:
@@ -147,17 +140,30 @@ class Emo(_Basic_class):
                     except:
                         temp += '0'
             bits_list.append(temp)
-        self.show_bits(bits_list)
-        #for i in bits_list:
-        #    print i
+        return self.string_bits_to_bytes(bits_list)
+
+    def map_len(self, s):
+        smap = self.string_to_string_bits(s)
         return len(smap[0])
+
+    def off(self):
+        #send_bytes(self.OFF)
+        self.show_bytes(self.OFF)
+
+    def show_string(self, s, pos=0):
+        _bytes = self.string_to_bytes(s, pos)
+        self.show_bytes(_bytes)
+
+    def show_string_bits(self, bits):
+        _bytes = self.string_bits_to_bytes(bits)
+        self.show_bytes(_bytes)
 
     def show_emo(self, emo):
         if emo in self.emotions._emotions.keys():
-            self.show_bits(self.emotions.emotion(emo))
+            self.show_string_bits(self.emotions.emotion(emo))
 
         if emo in self.pictures._pictures.keys():
-            self.show_bits(self.pictures.picture(emo))
+            self.show_string_bits(self.pictures.picture(emo))
 
     def get_start(self):
         count = 0
