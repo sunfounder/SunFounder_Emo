@@ -1,5 +1,8 @@
+import spidev
+import .emo_maps
+import logging
+
 class _Basic_class(object):
-    import logging
 
     _class_name = '_Basic_class'
     _DEBUG = 'error'
@@ -47,8 +50,6 @@ class _Basic_class(object):
         pass
 
 class Emo(_Basic_class):
-    import spidev
-    import .emo_maps
 
     OFF = [
         0x00, 0x00, 0x00,
