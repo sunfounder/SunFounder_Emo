@@ -48,7 +48,7 @@ class _Basic_class(object):
 
 class Emo(_Basic_class):
     import spidev
-    import emo_maps
+    import .emo_maps
 
     OFF = [
         0x00, 0x00, 0x00,
