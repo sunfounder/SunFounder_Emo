@@ -15,9 +15,6 @@ class _Basic_class(object):
     DEBUG_NAMES = ['critical', 'error', 'warning', 'info', 'debug']
 
     def __init__(self):
-        pass
-
-    def logger_setup(self):
         self.logger = self.logging.getLogger(self._class_name)
         self.ch = self.logging.StreamHandler()
         form = "%(asctime)s [%(levelname)s] %(message)s"
@@ -67,8 +64,8 @@ class Emo(_Basic_class):
     _class_name = 'Emo'
 
     def __init__(self, ce=0):
+        super().__init__()
         self.ce = ce
-        self.logger_setup()
         self.spi = self.spidev.SpiDev()
         self.spi.open(0,0)
 
