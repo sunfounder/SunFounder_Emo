@@ -1,6 +1,6 @@
 import spidev
 import logging
-import SunFounder_Emo.emo_maps
+from SunFounder_Emo.emo_maps import Alphabet, Emotions, Pictures
 
 class _Basic_class(object):
 
@@ -15,10 +15,10 @@ class _Basic_class(object):
     DEBUG_NAMES = ['critical', 'error', 'warning', 'info', 'debug']
 
     def __init__(self):
-        self.logger = self.logging.getLogger(self._class_name)
-        self.ch = self.logging.StreamHandler()
+        self.logger = logging.getLogger(self._class_name)
+        self.ch = logging.StreamHandler()
         form = "%(asctime)s [%(levelname)s] %(message)s"
-        self.formatter = self.logging.Formatter(form)
+        self.formatter = logging.Formatter(form)
         self.ch.setFormatter(self.formatter)
         self.logger.addHandler(self.ch)
         self._debug    = self.logger.debug
@@ -66,12 +66,12 @@ class Emo(_Basic_class):
     def __init__(self, ce=0):
         super().__init__()
         self.ce = ce
-        self.spi = self.spidev.SpiDev()
+        self.spi = spidev.SpiDev()
         self.spi.open(0,0)
 
-        self.alphabet = self.emo_maps.Alphabet()
-        self.emotions = self.emo_maps.Emotions()
-        self.pictures = self.emo_maps.Pictures()
+        self.alphabet = Alphabet()
+        self.emotions = Emotions()
+        self.pictures = Pictures()
 
     def show_bytes(self, _bytes):
         if not self.get_start():
