@@ -1,6 +1,6 @@
 import spidev
-import .emo_maps
 import logging
+import SunFounder_Emo.emo_maps
 
 class _Basic_class(object):
 

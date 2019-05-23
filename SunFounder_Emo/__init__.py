@@ -1,5 +1,5 @@
-from .emo import Emo
-from .emo_maps import Alphabet, Emotions, Pictures
+from SunFounder_Emo.emo import Emo
+from SunFounder_Emo.emo_maps import Alphabet, Emotions, Pictures
 
 def main():
     print("Test Function to do")
