@@ -5,7 +5,7 @@ Quick Links:
 
  * [About SunFounder Emo](#about_this_module)
  * [Update](#update)
- * [Trouble Shootings](#trouble)
+ * [How to](#howto)
  * [About SunFounder](#about_sunfounder)
  * [License](#license)
  * [Contact us](#contact_us)
@@ -20,10 +20,37 @@ It can display some emotions or simple pictures.The resolution ratio is 24 * 8.
 ### Update:
 2017-09-01:
  - New repo
+ 
+ 2019-06-01:
+ - Works
 
 
-<a id="trouble"></a>
-### Trouble Shootings:
+<a id="howto"></a>
+### How to
+0. Requirements
+* Sunfounder Emo
+* Latest Raspbian
+* Python 3 (`apt-get install python3`)
+
+1. Git clone
+
+```bash
+git clone https://github.com/sevarg/SunFounder_Emo.git
+```
+
+2. Install the library
+
+```bash
+cd SunFounder_Emo
+sudo python3 setup.py install
+`
+
+3. Run examples
+
+```
+sudo python3 examples/animate.py
+```
+
 ----------------------------------------------
 <a id="about_sunfounder"></a>
 ### About SunFounder
