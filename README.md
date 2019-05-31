@@ -43,7 +43,7 @@ git clone https://github.com/sevarg/SunFounder_Emo.git
 ```bash
 cd SunFounder_Emo
 sudo python3 setup.py install
-`
+```
 
 3. Run examples
 
