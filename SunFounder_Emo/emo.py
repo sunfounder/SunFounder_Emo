@@ -1,4 +1,4 @@
-import spidev
+import spi
 import logging
 from SunFounder_Emo.emo_maps import Alphabet, Emotions, Pictures
 
@@ -66,8 +66,7 @@ class Emo(_Basic_class):
     def __init__(self, ce=0):
         super().__init__()
         self.ce = ce
-        self.spi = spidev.SpiDev()
-        self.spi.open(0,0)
+        self.dev = spi.openSPI(device="/dev/spidev0.0")
 
         self.alphabet = Alphabet()
         self.emotions = Emotions()
@@ -75,9 +74,11 @@ class Emo(_Basic_class):
 
     def show_bytes(self, _bytes):
         if not self.get_start():
-            return False
-        self.spi.writebytes(self._begin_data)  # If emo get 0x02, it begin to store the HEX data
-        self.spi.writebytes(_bytes)
+            raise IOError("Emo is not detected")
+        self._debug("Emo is connected!")
+        # If emo get 0x02, it begin to store the HEX data
+        spi.transfer(self.dev, tuple(self._begin_data))
+        spi.transfer(self.dev, tuple(_bytes))
         return True
 
     def string_bits_to_bytes(self, _bits_list):
@@ -116,8 +117,6 @@ class Emo(_Basic_class):
 
 
     def string_to_bytes(self, s, pos=0):
-        #for i in smap:
-        #    print i
         smap = self.string_to_string_bits(s)
         bits_list = []
         for i in range(8):
@@ -129,7 +128,7 @@ class Emo(_Basic_class):
                     except:
                         temp += '0'
             else:
-            # add 0 at front
+                # add 0 at front
                 for j in range(pos):
                     temp += '0'
                 for j in range(24-pos):
@@ -145,7 +144,6 @@ class Emo(_Basic_class):
         return len(smap[0])
 
     def off(self):
-        #send_bytes(self.OFF)
         self.show_bytes(self.OFF)
 
     def show_string(self, s, pos=0):
@@ -164,15 +162,20 @@ class Emo(_Basic_class):
             self.show_string_bits(self.pictures.picture(emo))
 
     def get_start(self):
-        count = 0
-        while True:
-            self.spi.writebytes(self._start_signal) # send start signel 0x01 and get respond
-            a_status = self.spi.readbytes(1)
-            if (a_status == self._start_signal): # If emo get 0x01, and get start, it respond 0x01
-                break;
-            count = count + 1
-            if (count>23): # emo not get start, and over time
-                return False
+        self._debug("get_start")
+        for _ in range(24):
+            to_send = self._start_signal
+            self._debug("to_send: %s" % to_send)
+            # send start signel 0x01 and get respond
+            a_status = spi.transfer(self.dev, tuple(to_send))
+            a_status = list(a_status)
+            self._debug("a_status: %s" % a_status)
+            # If emo get 0x01, and get start, it respond 0x01
+            if (a_status == self._start_signal):
+                break
+        # emo not get start, and timeout
+        else:
+            return False
         return True
 
     @property

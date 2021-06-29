@@ -1,9 +1,10 @@
-## SunFounder_Emo
+# SunFounder_Emo
 SunFounder Emo
 
 Quick Links:
 
  * [About SunFounder Emo](#about_this_module)
+ * [Installation](#installation)
  * [Update](#update)
  * [Trouble Shootings](#trouble)
  * [About SunFounder](#about_sunfounder)
@@ -11,27 +12,53 @@ Quick Links:
  * [Contact us](#contact_us)
 
 <a id="about_this_module"></a>
-### About SunFounder Emo:
+
+## About SunFounder Emo
+
 This is a LED matrix display, use SPI bus to communicate.
 Both use for raspberry or arduino board.
-It can display some emotions or simple pictures.The resolution ratio is 24 * 8.
+It can display some emotions or simple pictures. The resolution ratio is 24 * 8.
+
+<a id="installation"></a>
+
+## Installation
+
+Install SPI-Py
+
+``` bash
+git clone https://github.com/lthiery/SPI-Py.git
+cd SPI-Py
+sudo python3 setup.py install
+```
+
+Install Emo
+
+``` bash
+git clone https://github.com/sunfounder/SunFounder_Emo.git
+cd SunFounder_Emo
+sudo python3 setup.py install
+```
+
+> Make sure the SPI interface is enabled for your Raspberry Pi. This can be done using the raspi-config utility: `sudo raspi-config`
 
 <a id="update"></a>
-### Update:
+## Update:
+2021-06-29:
+ - change spi library to SPI-Py
 2017-09-01:
  - New repo
 
 
 <a id="trouble"></a>
-### Trouble Shootings:
+## Trouble Shootings:
 ----------------------------------------------
 <a id="about_sunfounder"></a>
-### About SunFounder
+## About SunFounder
 SunFounder is a technology company focused on Raspberry Pi and Arduino open source community development. Committed to the promotion of open source culture, we strives to bring the fun of electronics making to people all around the world and enable everyone to be a maker. Our products include learning kits, development boards, robots, sensor modules and development tools. In addition to high quality products, SunFounder also offers video tutorials to help you make your own project. If you have interest in open source or making something cool, welcome to join us!
 
 ----------------------------------------------
 <a id="license"></a>
-### License
+## License
 This is the code for SunFounder Emo.
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
@@ -51,7 +78,7 @@ Email: service@sunfounder.com, support@sunfounder.com
 
 ----------------------------------------------
 <a id="contact_us"></a>
-### Contact us:
+## Contact us:
 website:
 	www.sunfounder.com
 

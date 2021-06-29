@@ -21,24 +21,17 @@ blink2 = [
     0x00,0x3C,0x00]
 
 lm = Emo()
-'''
+
 while True:
-    lm.send_bytes(blink1)
+    lm.show_bytes(blink1)
     print("blink1")
     time.sleep(2)
-    lm.send_bytes(blink2)
+    lm.show_bytes(blink2)
     print("blink2")
     time.sleep(0.1)
-    lm.send_bytes(blink1)
+    lm.show_bytes(blink1)
     print("blink1")
     time.sleep(0.1)
-    lm.send_bytes(blink2)
+    lm.show_bytes(blink2)
     print("blink2")
-    time.sleep(0.1)
-'''
-print "words you can use:\n",lm.supported_character
-value = ';) :( :D'
-value_len = lm.map_len(value)
-for i in range(value_len):
-    lm.show_string(value, -i+10)
     time.sleep(0.1)
